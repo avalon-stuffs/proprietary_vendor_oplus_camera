@@ -1,0 +1,67 @@
+From 19e4dd8fe2af39d65af8725edc88ccd384682ec9 Mon Sep 17 00:00:00 2001
+From: pure-soul-kk <krishnakripa34567@gmail.com>
+Date: Sat, 21 Nov 2026 11:57:09 +0000
+Subject: [PATCH] Enable quick video support
+
+The camera unit feature configuration does not advertise support for
+com.oplus.quick.video.support on this project, causing the camera to report
+quick video as unsupported. This hides the "Long press shutter button"
+menu setting in Camera Settings and prevents tapping and holding the shutter
+button from initiating video recording.
+
+Report com.oplus.quick.video.support as true in CameraConfig, and default
+the long press behavior to fast_record_video in DefaultValueUtil.
+
+---
+ .../oplus/camera/configure/CameraConfig.smali | 16 ++++++++++++++++
+ .../camera/common/utils/DefaultValueUtil.smali| 10 +---------
+ 2 files changed, 17 insertions(+), 9 deletions(-)
+
+diff --git a/smali/com/oplus/camera/configure/CameraConfig.smali b/smali/com/oplus/camera/configure/CameraConfig.smali
+--- a/smali/com/oplus/camera/configure/CameraConfig.smali
++++ b/smali/com/oplus/camera/configure/CameraConfig.smali
+@@ -1395,6 +1395,18 @@
+ .method public static getConfigBooleanValue(Ljava/lang/String;)Z
+     .locals 5
+ 
++    const-string v0, "com.oplus.quick.video.support"
++
++    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_quick_video_done
++
++    const/4 v0, 0x1
++
++    return v0
++
++    :cond_quick_video_done
+     .line 1
+     sget-object v0, Lcom/oplus/camera/configure/CameraConfig;->d:Ljava/util/concurrent/ConcurrentHashMap;
+ 
+diff --git a/smali_classes24/com/oplus/camera/common/utils/DefaultValueUtil.smali b/smali_classes24/com/oplus/camera/common/utils/DefaultValueUtil.smali
+--- a/smali_classes24/com/oplus/camera/common/utils/DefaultValueUtil.smali
++++ b/smali_classes24/com/oplus/camera/common/utils/DefaultValueUtil.smali
+@@ -37,13 +37,7 @@
+ 
+     if-eqz v0, :cond_0
+ 
+-    const-string v0, "com.oplus.support.multi.frame.burst.shot"
+-
+-    const/4 v1, 0x0
+-
+-    invoke-static {v0, v1}, Lcom/oplus/camera/configure/CameraConfig;->c(Ljava/lang/String;Z)Z
+-
+-    move-result v0
++    const-string v0, "fast_record_video"
+ 
+-    if-nez v0, :cond_0
+-
+-    const-string v0, "fast_record_video"
+-
+     return-object v0
+ 
+     :cond_0
+-- 
+2.53.0

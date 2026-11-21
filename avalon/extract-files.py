@@ -218,6 +218,8 @@ OPLUSCAMERA_CHECKS = (
     ),
     # patches/0003: the AnyGallery helper class it adds.
     Check('0003 any gallery', 'Lco/aospa/camera/AnyGallery;'),
+    # patches/0004: Enable quick video support.
+    Check('0004 quick video supported', ':cond_quick_video_done'),
     # blob_fixup_opluscamera_privapp_linker_ns
     Check(
         'linker-ns extractNativeLibs=false',
