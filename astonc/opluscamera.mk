@@ -4,7 +4,8 @@ PRODUCT_PACKAGES += \
     android.hardware.graphics.common-V3-ndk.vendor \
     init.oplus.camera.rc \
     init.oplus.camera.system_ext.rc \
-    CameraThemedIcon
+    CameraThemedIcon \
+    GalleryThemedIcon
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/permissions/oplus_google_lens_config.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/permissions/oplus_google_lens_config.xml \
